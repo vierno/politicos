@@ -31,7 +31,9 @@ from politicos_api.handlers.main import MainHandler
 from politicos_api.handlers.nationalities import NationalitiesHandler
 from politicos_api.handlers.occupations import OccupationsHandler
 from politicos_api.handlers.political_offices import PoliticalOfficesHandler
-from politicos_api.handlers.political_parties import PoliticalPartiesHandler
+from politicos_api.handlers.political_parties import (
+    PoliticalPartiesHandler, PoliticalPartiesSuggestHandler
+)
 from politicos_api.handlers.routes import RoutesHandler
 
 
@@ -53,6 +55,11 @@ handlers_api = [
     # url(r'/api/v1/countries/?', MainHandler, name='countries'),
     url(r'/api/v1/?', CandidaciesHandler, name='api-v1'),
     url(r'/api/v1/candidacies/?', CandidaciesHandler, name='candidacies'),
+    url(
+        r'/api/v1/political-parties/suggest/?',
+        PoliticalPartiesSuggestHandler,
+        name='political-parties-suggest',
+    ),
     url(
         r'/api/v1/political-parties/?',
         PoliticalPartiesHandler,

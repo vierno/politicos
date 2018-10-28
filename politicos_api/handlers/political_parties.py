@@ -29,3 +29,34 @@ class PoliticalPartiesHandler(BaseHandler):
             'nr_partido',
         ])
         await self.json_response(response)
+
+
+class PoliticalPartiesSuggestHandler(BaseHandler):
+
+    @cache(5)
+    async def get(self):
+        q = self.get_argument('q')
+        suggest_query = {
+            'query': {
+                'text': q,
+                'completion': {
+                    'field': 'nm_partido.suggest',
+                    'skip_duplicates': True,
+                    'size': 10,
+                    # 'fuzzy': True,
+                }
+            }
+        }
+        query = await self.es.search(
+            index='metal-2018',
+            body={'suggest': suggest_query},
+        )
+        response_options = query['suggest']['query'][0]['options']
+        response = [
+            {
+                'nm_partido': x.get('text'),
+                'sg_partido': x.get('_source', {}).get('sg_partido')
+            }
+            for x in response_options
+        ]
+        await self.json_response(response)

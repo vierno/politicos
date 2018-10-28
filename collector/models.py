@@ -17,13 +17,13 @@
 
 from elasticsearch.helpers import bulk
 from elasticsearch_dsl import (
-    analyzer, Date, Document, Index, Integer, InnerDoc, Keyword, Nested,
-    Short, Text
+    analyzer, Completion, Date, Document, Index, Integer, InnerDoc, Keyword,
+    Nested, Short, Text
 )
 from elasticsearch_dsl.connections import connections
 
 
-INDEX_NAME = 'politicians'
+INDEX_NAME = 'metal'
 
 text_analyzer = analyzer(
     'text_analyzer',
@@ -84,7 +84,10 @@ class Politicians(Document):
         fields={'keyword': Keyword()},
         analyzer=text_analyzer
     )
-    nm_partido = Text(fields={'keyword': Keyword()})
+    nm_partido = Text(
+        fields={'keyword': Keyword(), 'suggest': Completion()},
+        analyzer=text_analyzer
+    )
     nm_urna_candidato = Text(fields={'keyword': Keyword()})
     nr_candidato = Text(fields={'keyword': Keyword()})
     nr_partido = Text(fields={'keyword': Keyword()})
